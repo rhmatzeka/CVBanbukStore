@@ -3,6 +3,7 @@
 import AppNavbar from "@/components/AppNavbar";
 import LoadingScreen from "@/components/LoadingScreen";
 import ProductImage from "@/components/ProductImage";
+import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 
@@ -17,16 +18,15 @@ type Product = {
   image?: string | null;
 };
 
-const COMPARE_KEY = "compare-products";
 const MAX_COMPARE_ITEMS = 2;
 
 function normalizeCompareIds(ids: string[]) {
   return Array.from(new Set(ids.filter((id) => id.length > 0))).slice(0, MAX_COMPARE_ITEMS);
 }
 
-function readCompareIds() {
+function readCompareIds(key: string) {
   try {
-    const storedCompare = localStorage.getItem(COMPARE_KEY);
+    const storedCompare = localStorage.getItem(key);
     const parsed: unknown = storedCompare ? JSON.parse(storedCompare) : [];
     return Array.isArray(parsed) ? normalizeCompareIds(parsed.filter((id): id is string => typeof id === "string")) : [];
   } catch {
@@ -34,21 +34,29 @@ function readCompareIds() {
   }
 }
 
-function writeCompareIds(ids: string[]) {
-  localStorage.setItem(COMPARE_KEY, JSON.stringify(normalizeCompareIds(ids)));
+function writeCompareIds(key: string, ids: string[]) {
+  localStorage.setItem(key, JSON.stringify(normalizeCompareIds(ids)));
 }
 
 const formatPrice = (value: number) => `Rp ${value.toLocaleString("id-ID")}`;
 
 export default function CompareProductsPage() {
+  const { data: session, status } = useSession();
   const [products, setProducts] = useState<Product[]>([]);
   const [compareIds, setCompareIds] = useState<string[]>([]);
   const [loading, setLoading] = useState(true);
   const [query, setQuery] = useState("");
   const [notice, setNotice] = useState("");
 
+  const compareKey = useMemo(() => {
+    if (status === "loading") return null;
+    const identifier = session?.user?.id || session?.user?.email || session?.user?.role || "guest";
+    return `compare-products-${identifier}`;
+  }, [session, status]);
+
   useEffect(() => {
-    setCompareIds(readCompareIds());
+    if (!compareKey) return;
+    setCompareIds(readCompareIds(compareKey));
 
     const loadProducts = async () => {
       try {
@@ -58,7 +66,7 @@ export default function CompareProductsPage() {
         setProducts(productList);
         setCompareIds((currentIds) => {
           const validIds = currentIds.filter((id) => productList.some((product) => product.id === id));
-          if (validIds.length !== currentIds.length) writeCompareIds(validIds);
+          if (validIds.length !== currentIds.length) writeCompareIds(compareKey, validIds);
           return validIds;
         });
       } finally {
@@ -67,7 +75,7 @@ export default function CompareProductsPage() {
     };
 
     loadProducts();
-  }, []);
+  }, [compareKey]);
 
   const selectedProducts = useMemo(
     () => compareIds.map((id) => products.find((product) => product.id === id)).filter((product): product is Product => Boolean(product)),
@@ -103,13 +111,15 @@ export default function CompareProductsPage() {
   };
 
   const updateCompareIds = (next: string[], message: string) => {
+    if (!compareKey) return;
     setCompareIds(next);
-    writeCompareIds(next);
+    writeCompareIds(compareKey, next);
     showNotice(message);
   };
 
   const toggleCompare = (product: Product) => {
-    const currentIds = readCompareIds();
+    if (!compareKey) return;
+    const currentIds = readCompareIds(compareKey);
     const selected = currentIds.includes(product.id);
 
     if (selected) {

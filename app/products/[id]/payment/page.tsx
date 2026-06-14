@@ -306,8 +306,8 @@ export default function PaymentPage() {
 
   if (!product) {
     return (
-      <div className="page-shell flex min-h-screen items-center justify-center">
-        <div className="glass-panel px-8 py-6 text-sm text-slate-300">Produk tidak ditemukan.</div>
+      <div className="product-page flex min-h-screen items-center justify-center">
+        <div className="product-card px-8 py-6 text-sm text-slate-300">Produk tidak ditemukan.</div>
       </div>
     );
   }

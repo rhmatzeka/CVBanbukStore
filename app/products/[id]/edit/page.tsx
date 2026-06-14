@@ -124,8 +124,8 @@ export default function EditProductPage() {
 
   if (session?.user.role !== "ADMIN") {
     return (
-      <div className="page-shell flex min-h-screen items-center justify-center px-4">
-        <div className="glass-panel px-8 py-6 text-sm text-slate-300">
+      <div className="dashboard-page flex min-h-screen items-center justify-center px-4">
+        <div className="customer-account-panel px-8 py-6 text-sm text-slate-300">
           Unauthorized - Hanya admin yang bisa akses halaman ini
         </div>
       </div>
@@ -133,12 +133,12 @@ export default function EditProductPage() {
   }
 
   return (
-    <main className="page-shell pb-16">
+    <main className="dashboard-page customer-account-page pb-16">
       <AppNavbar />
 
       <div className="content-wrap py-8">
         <div className="mx-auto max-w-5xl">
-          <div className="glass-panel px-5 py-5 sm:px-7 sm:py-6 lg:px-8">
+          <div className="customer-account-panel px-5 py-5 sm:px-7 sm:py-6 lg:px-8">
             <div className="flex flex-col gap-4 border-b border-white/6 pb-5 lg:flex-row lg:items-end lg:justify-between">
               <div className="max-w-2xl">
                 <span className="section-kicker">Admin tools</span>

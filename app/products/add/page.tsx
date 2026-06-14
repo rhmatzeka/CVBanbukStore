@@ -61,8 +61,8 @@ export default function AddProductPage() {
 
   if (session?.user.role !== "ADMIN") {
     return (
-      <div className="page-shell flex min-h-screen items-center justify-center">
-        <div className="glass-panel px-8 py-6 text-sm text-slate-300">
+      <div className="dashboard-page flex min-h-screen items-center justify-center">
+        <div className="customer-account-panel px-8 py-6 text-sm text-slate-300">
           Unauthorized - Hanya admin yang bisa akses halaman ini
         </div>
       </div>
@@ -70,24 +70,26 @@ export default function AddProductPage() {
   }
 
   return (
-    <main className="page-shell pb-16">
+    <main className="dashboard-page customer-account-page pb-16">
       <AppNavbar />
 
-      <section className="bg-[color:var(--canvas-parchment)]">
-        <div className="content-wrap py-20">
+      <section className="content-wrap pt-10 pb-4">
+        <div>
           <span className="section-kicker">Admin tools</span>
-          <h1 className="section-title">Tambah produk baru</h1>
-          <p className="section-subtitle">
+          <h1 className="mt-2 text-[30px] font-semibold leading-[1.04] text-white md:text-[38px]">
+            Tambah produk baru
+          </h1>
+          <p className="mt-2 max-w-xl text-[14px] leading-6 text-white/62">
             Tambahkan foto, harga, stok, dan spesifikasi dalam form yang ringkas.
           </p>
         </div>
       </section>
 
       <div className="content-wrap py-8">
-        <div className="mx-auto max-w-5xl rounded-[18px] border border-[color:var(--hairline)] bg-white p-6 sm:p-8">
-          <form onSubmit={handleSubmit} className="space-y-5">
+        <div className="mx-auto max-w-3xl customer-account-panel p-6 sm:p-8">
+          <form onSubmit={handleSubmit} className="space-y-6">
             <div>
-              <label className="mb-2 block text-[14px] font-semibold leading-[1.29] tracking-[-0.224px] text-[color:var(--ink)]">
+              <label className="mb-2 block text-[14px] font-semibold leading-[1.29] tracking-[-0.224px] text-white">
                 Nama Produk *
               </label>
               <input
@@ -101,7 +103,7 @@ export default function AddProductPage() {
 
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <label className="mb-2 block text-[14px] font-semibold leading-[1.29] tracking-[-0.224px] text-[color:var(--ink)]">
+                <label className="mb-2 block text-[14px] font-semibold leading-[1.29] tracking-[-0.224px] text-white">
                   Harga (Rp) *
                 </label>
                 <input
@@ -114,7 +116,7 @@ export default function AddProductPage() {
               </div>
 
               <div>
-                <label className="mb-2 block text-[14px] font-semibold leading-[1.29] tracking-[-0.224px] text-[color:var(--ink)]">
+                <label className="mb-2 block text-[14px] font-semibold leading-[1.29] tracking-[-0.224px] text-white">
                   Stok *
                 </label>
                 <input
@@ -128,7 +130,7 @@ export default function AddProductPage() {
             </div>
 
             <div>
-              <label className="mb-2 block text-[14px] font-semibold leading-[1.29] tracking-[-0.224px] text-[color:var(--ink)]">
+              <label className="mb-2 block text-[14px] font-semibold leading-[1.29] tracking-[-0.224px] text-white">
                 Deskripsi *
               </label>
               <textarea
@@ -141,7 +143,7 @@ export default function AddProductPage() {
             </div>
 
             <div>
-              <label className="mb-2 block text-[14px] font-semibold leading-[1.29] tracking-[-0.224px] text-[color:var(--ink)]">
+              <label className="mb-2 block text-[14px] font-semibold leading-[1.29] tracking-[-0.224px] text-white">
                 Bahan *
               </label>
               <input
@@ -155,7 +157,7 @@ export default function AddProductPage() {
             </div>
 
             <div>
-              <label className="mb-2 block text-[14px] font-semibold leading-[1.29] tracking-[-0.224px] text-[color:var(--ink)]">
+              <label className="mb-2 block text-[14px] font-semibold leading-[1.29] tracking-[-0.224px] text-white">
                 Ukuran *
               </label>
               <input
@@ -168,18 +170,18 @@ export default function AddProductPage() {
               />
             </div>
 
-            <div className="grid gap-5 lg:grid-cols-[1fr_0.9fr]">
+            <div className="grid gap-6 lg:grid-cols-[1fr_0.9fr]">
               <div>
-                <label className="mb-2 block text-[14px] font-semibold leading-[1.29] tracking-[-0.224px] text-[color:var(--ink)]">
+                <label className="mb-2 block text-[14px] font-semibold leading-[1.29] tracking-[-0.224px] text-white">
                   Upload Foto Produk
                 </label>
                 <input
                   type="file"
                   accept="image/*"
                   onChange={handleImageChange}
-                  className="app-input file:mr-4 file:rounded-full file:border-0 file:bg-[color:var(--primary)] file:px-4 file:py-2 file:text-sm file:font-normal file:text-white"
+                  className="app-input file:mr-4 file:rounded-full file:border-0 file:bg-[color:var(--primary)] file:px-4 file:py-2 file:text-sm file:font-semibold file:text-[#06100d] cursor-pointer"
                 />
-                <p className="mt-2 text-[12px] leading-none tracking-[-0.12px] text-[color:var(--ink-muted-48)]">
+                <p className="mt-2 text-[12px] leading-normal tracking-[-0.12px] text-white/48">
                   Bisa upload dari device atau isi manual dengan URL jika diperlukan.
                 </p>
 
@@ -193,8 +195,8 @@ export default function AddProductPage() {
               </div>
 
               <div>
-                <p className="mb-2 text-[14px] font-semibold leading-[1.29] tracking-[-0.224px] text-[color:var(--ink)]">Preview</p>
-                <div className="overflow-hidden rounded-lg bg-[color:var(--canvas-parchment)] p-7">
+                <p className="mb-2 text-[14px] font-semibold leading-[1.29] tracking-[-0.224px] text-white">Preview</p>
+                <div className="overflow-hidden rounded-lg bg-white/5 border border-white/10 p-4">
                   <div className="aspect-square">
                     <ProductImage src={formData.image} alt={formData.name || "Preview produk"} />
                   </div>
